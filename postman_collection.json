@@ -1,0 +1,158 @@
+{
+  "info": {
+    "name": "Speech Translation API",
+    "description": "Real-time multilingual speech translation with emotion preservation",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        },
+        "description": "Check API health status"
+      }
+    },
+    {
+      "name": "Process Audio (Complete Pipeline)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "audio",
+              "type": "file",
+              "src": "/path/to/audio.wav",
+              "description": "Audio file to process"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/process-audio",
+          "host": ["{{base_url}}"],
+          "path": ["api", "process-audio"]
+        },
+        "description": "Process audio through complete translation pipeline:\n1. Speech-to-Text\n2. Emotion Detection\n3. Translation\n4. Emotional Text-to-Speech"
+      }
+    },
+    {
+      "name": "Speech-to-Text - Transcribe",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "audio",
+              "type": "file",
+              "src": "/path/to/audio.wav"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/speech-to-text/transcribe",
+          "host": ["{{base_url}}"],
+          "path": ["api", "speech-to-text", "transcribe"]
+        },
+        "description": "Transcribe audio with automatic language detection"
+      }
+    },
+    {
+      "name": "Emotion - Detect",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "audio",
+              "type": "file",
+              "src": "/path/to/audio.wav"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/emotion/detect",
+          "host": ["{{base_url}}"],
+          "path": ["api", "emotion", "detect"]
+        },
+        "description": "Detect emotion from audio file"
+      }
+    },
+    {
+      "name": "Translation - Translate",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Hello, how are you?\",\n  \"source_lang\": \"en\",\n  \"target_lang\": \"es\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/translation/translate",
+          "host": ["{{base_url}}"],
+          "path": ["api", "translation", "translate"]
+        },
+        "description": "Translate text between languages"
+      }
+    },
+    {
+      "name": "Text-to-Speech - Generate",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Hola, ¿cómo estás?\",\n  \"emotion\": \"happy\",\n  \"emotion_attributes\": {\n    \"pitch_mean\": 0.65,\n    \"energy\": 0.72,\n    \"speaking_rate\": 0.55\n  },\n  \"language_code\": \"es\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/text-to-speech/generate",
+          "host": ["{{base_url}}"],
+          "path": ["api", "text-to-speech", "generate"]
+        },
+        "description": "Generate emotional speech from text"
+      }
+    },
+    {
+      "name": "Text-to-Speech - Get Voices",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/text-to-speech/voices",
+          "host": ["{{base_url}}"],
+          "path": ["api", "text-to-speech", "voices"]
+        },
+        "description": "Get list of available ElevenLabs voices"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ]
+}
+
+

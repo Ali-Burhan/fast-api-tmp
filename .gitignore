@@ -1,12 +1,13 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# C extensions
 *.so
+
+# Distribution / packaging
 .Python
-env/
-venv/
-ENV/
 build/
 develop-eggs/
 dist/
@@ -19,13 +20,40 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Environment
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Environments
 .env
+.env.local
 .venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
 # IDEs
 .vscode/
@@ -33,20 +61,58 @@ wheels/
 *.swp
 *.swo
 *~
+.DS_Store
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
+# Jupyter Notebook
+.ipynb_checkpoints
 
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
+# pyenv
+.python-version
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
 
 # Logs
 *.log
+logs/
 
-# OS
-.DS_Store
-Thumbs.db
+# Database
+*.db
+*.sqlite3
+
+# Redis dump
+dump.rdb
+
+# Audio files (for testing)
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.ogg
+*.webm
+
+# Alembic
+alembic/versions/*.py
+!alembic/versions/.gitkeep
