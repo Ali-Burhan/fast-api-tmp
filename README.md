@@ -1,50 +1,26 @@
-# 🎙️ FastAPI Speech Translation API
+# FastAPI Speech Translation API
 
-Real-time multilingual speech translation with emotion preservation using FastAPI, Deepgram, OpenSmile, DeepL, and ElevenLabs.
+Real-time multilingual speech translation with emotion preservation.
 
----
+## Prerequisites
 
-## ✨ Features
+- Python 3.10+
+- API keys: [Deepgram](https://console.deepgram.com/), [DeepL](https://www.deepl.com/pro-api), [ElevenLabs](https://elevenlabs.io/)
 
-- 🗣️ **Speech-to-Text** - Automatic transcription with language detection (English/Spanish)
-- 😊 **Emotion Detection** - Extract emotional attributes using OpenSmile
-- 🌐 **Translation** - High-quality translation between English and Spanish
-- 🎵 **Emotional Text-to-Speech** - Generate speech that preserves detected emotions
-- ⚡ **Async Processing** - Fast, non-blocking API endpoints
-- 💾 **Redis Caching** - Efficient temporary audio storage
-- 📝 **Auto Documentation** - Interactive API docs with Swagger UI
+## Installation
 
----
+1. **Create and activate virtual environment:**
 
-## 🏗️ Architecture
+   ```bash
+   python -m venv venv
+   .\venv\Scripts\Activate.ps1  # Windows PowerShell
+   ```
 
-**Modular Monolithic Design** - Single deployable application with organized internal modules:
+2. **Install dependencies:**
 
-```
-app/
-├── main.py                      # Application entry point & orchestration
-├── core/
-│   ├── config.py                # Configuration management
-│   ├── redis_client.py          # Redis caching client
-│   └── utils.py                 # Utility functions
-└── modules/
-    ├── speech_to_text/          # Deepgram integration
-    │   ├── service.py
-    │   └── router.py
-    ├── emotion_detection/       # OpenSmile integration
-    │   ├── service.py
-    │   └── router.py
-    ├── translation/             # DeepL integration
-    │   ├── service.py
-    │   └── router.py
-    └── text_to_speech/          # ElevenLabs integration
-        ├── service.py
-        └── router.py
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 - **Python 3.13+**
 - **Redis server**
@@ -91,7 +67,7 @@ uvicorn app.main:app --reload
 - **[INSTALLATION.md](INSTALLATION.md)** - Complete installation guide with troubleshooting
 - **[API_REFERENCE.md](API_REFERENCE.md)** - Detailed API documentation and examples
 - **[PYENV_GUIDE.md](PYENV_GUIDE.md)** - Python version management with pyenv
-- **Interactive API Docs** - http://localhost:8000/docs
+- **Swagger (Interactive) API Docs** - http://localhost:8000/docs
 - **ReDoc** - http://localhost:8000/redoc
 
 ## 🎯 API Endpoints
@@ -298,12 +274,6 @@ redis-cli ping  # Should return: PONG
 
 > 📘 **For detailed troubleshooting:** [INSTALLATION.md](INSTALLATION.md#troubleshooting)
 
-## 📝 Development
-
-### Code Formatting
-```bash
-black app/
-```
 
 ### Linting
 ```bash
@@ -350,6 +320,3 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 - [ElevenLabs API](https://docs.elevenlabs.io/)
 - [OpenSmile Documentation](https://audeering.github.io/opensmile-python/)
 
----
-
-Built with ❤️ using FastAPI
