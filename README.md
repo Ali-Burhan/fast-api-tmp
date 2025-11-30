@@ -1,386 +1,67 @@
-# 🎙️ FastAPI Speech Translation API
+# FastAPI Speech Translation API
 
-Real-time multilingual speech translation with emotion preservation using FastAPI, Deepgram, OpenSmile, DeepL, and ElevenLabs.
+Real-time multilingual speech translation with emotion preservation.
 
-## ✨ Features
+## Prerequisites
 
-- 🗣️ **Speech-to-Text** - Automatic transcription with language detection (English/Spanish)
-- 😊 **Emotion Detection** - Extract emotional attributes using OpenSmile
-- 🌐 **Translation** - High-quality translation between English and Spanish
-- 🎵 **Emotional Text-to-Speech** - Generate speech that preserves detected emotions
-- ⚡ **Async Processing** - Fast, non-blocking API endpoints
-- 💾 **Redis Caching** - Efficient temporary audio storage
-- 📝 **Auto Documentation** - Interactive API docs with Swagger UI
+- Python 3.10+
+- API keys: [Deepgram](https://console.deepgram.com/), [DeepL](https://www.deepl.com/pro-api), [ElevenLabs](https://elevenlabs.io/)
 
-## 🏗️ Architecture
+## Installation
 
-**Modular Monolithic Design** - Single deployable application with organized internal modules:
+1. **Create and activate virtual environment:**
 
-```
-app/
-├── main.py                      # Application entry point & orchestration
-├── core/
-│   ├── config.py                # Configuration management
-│   ├── redis_client.py          # Redis caching client
-│   └── utils.py                 # Utility functions
-└── modules/
-    ├── speech_to_text/          # Deepgram integration
-    │   ├── service.py
-    │   └── router.py
-    ├── emotion_detection/       # OpenSmile integration
-    │   ├── service.py
-    │   └── router.py
-    ├── translation/             # DeepL integration
-    │   ├── service.py
-    │   └── router.py
-    └── text_to_speech/          # ElevenLabs integration
-        ├── service.py
-        └── router.py
-```
+   ```bash
+   python -m venv venv
+   .\venv\Scripts\Activate.ps1  # Windows PowerShell
+   ```
 
-## 🚀 Quick Start
+2. **Install dependencies:**
 
-### Prerequisites
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-- Python 3.10 or higher (Python 3.13+ supported)
-- Redis server
-- **MediaInfo** (required for MP3 emotion detection on Windows)
-  - Install: `choco install mediainfo` (Windows)
-  - See [MEDIAINFO_INSTALL.md](MEDIAINFO_INSTALL.md) for details
-- API keys for:
-  - [Deepgram](https://console.deepgram.com/)
-  - [DeepL](https://www.deepl.com/pro-api)
-  - [ElevenLabs](https://elevenlabs.io/)
+3. **Configure environment:**
 
-### 1. Clone and Setup
+   ```bash
+   Copy-Item .env.example .env  # Windows
+   ```
+
+   Edit `.env` and add your API keys:
+
+   ```env
+   DEEPGRAM_API_KEY="your-key-here"
+   DEEPL_API_KEY="your-key-here"
+   ELEVENLABS_API_KEY="your-key-here"
+   ```
+
+4. **Run the server:**
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+API will be available at: http://localhost:8000
+
+## API Documentation
+
+- Swagger UI: http://localhost:8000/docs
+
+## Running with Frontend
+
+**Terminal 1 - Backend:**
 
 ```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 2. Configure Environment
-
-```bash
-# Copy example environment file
-cp .env.example .env
-
-# Edit .env and add your API keys
-# Required: DEEPGRAM_API_KEY, DEEPL_API_KEY, ELEVENLABS_API_KEY
-```
-
-### 3. Start Redis
-
-```bash
-# Using Docker (recommended)
-docker run -d -p 6379:6379 redis:alpine
-
-# Or install Redis locally
-# Windows: https://redis.io/docs/getting-started/installation/install-redis-on-windows/
-# Mac: brew install redis && brew services start redis
-# Linux: sudo apt-get install redis-server && sudo service redis-server start
-```
-
-### 4. Run the Application
-
-```bash
-# Development mode with auto-reload
+cd d:\My\fast-api-tmp
+.\venv\Scripts\Activate.ps1
 uvicorn app.main:app --reload
-
-# Production mode
-uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-The API will be available at: **http://localhost:8000**
-
-## 📖 API Documentation
-
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-
-## 🎯 API Endpoints
-
-### Main Pipeline Endpoint
-
-#### `POST /api/process-audio`
-
-Process audio through the complete translation pipeline.
-
-**Request:**
-- **Content-Type**: `multipart/form-data`
-- **Body**: `audio` file (mp3, wav, m4a, flac, ogg, webm)
-
-**Response:**
-```json
-{
-  "original_text": "Hello, how are you?",
-  "original_language": "English",
-  "translated_text": "Hola, ¿cómo estás?",
-  "target_language": "es",
-  "emotion": "happy",
-  "emotion_attributes": {
-    "pitch_mean": 0.65,
-    "energy": 0.72,
-    "speaking_rate": 0.55
-  },
-  "audio_base64": "base64_encoded_audio_data...",
-  "audio_size_bytes": 45231
-}
-```
-
-### Individual Module Endpoints
-
-#### `POST /api/speech-to-text/transcribe`
-Transcribe audio with language detection.
-
-#### `POST /api/emotion/detect`
-Detect emotion from audio.
-
-#### `POST /api/translation/translate`
-Translate text between languages.
-
-#### `POST /api/text-to-speech/generate`
-Generate emotional speech from text.
-
-#### `GET /api/text-to-speech/voices`
-List available ElevenLabs voices.
-
-## 🧪 Testing with cURL
-
-### Process Complete Audio
+**Terminal 2 - Frontend:**
 
 ```bash
-curl -X POST "http://localhost:8000/api/process-audio" \
-  -H "accept: application/json" \
-  -H "Content-Type: multipart/form-data" \
-  -F "audio=@sample.wav"
+cd d:\My\fe-ai-text-and-speech
+npm run dev
 ```
 
-### Transcribe Audio Only
-
-```bash
-curl -X POST "http://localhost:8000/api/speech-to-text/transcribe" \
-  -H "accept: application/json" \
-  -H "Content-Type: multipart/form-data" \
-  -F "audio=@sample.wav"
-```
-
-### Detect Emotion Only
-
-```bash
-curl -X POST "http://localhost:8000/api/emotion/detect" \
-  -H "accept: application/json" \
-  -H "Content-Type: multipart/form-data" \
-  -F "audio=@sample.wav"
-```
-
-### Translate Text
-
-```bash
-curl -X POST "http://localhost:8000/api/translation/translate" \
-  -H "accept: application/json" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "text": "Hello, how are you?",
-    "source_lang": "en",
-    "target_lang": "es"
-  }'
-```
-
-### Generate Speech
-
-```bash
-curl -X POST "http://localhost:8000/api/text-to-speech/generate" \
-  -H "accept: audio/mpeg" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "text": "Hola, ¿cómo estás?",
-    "emotion": "happy",
-    "language_code": "es"
-  }' \
-  --output output.mp3
-```
-
-## 🧪 Running Tests
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=app tests/
-
-# Run specific test file
-pytest tests/test_main.py -v
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-
-| Variable | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `DEEPGRAM_API_KEY` | Deepgram API key | - | ✅ |
-| `DEEPL_API_KEY` | DeepL API key | - | ✅ |
-| `ELEVENLABS_API_KEY` | ElevenLabs API key | - | ✅ |
-| `REDIS_HOST` | Redis server host | localhost | ❌ |
-| `REDIS_PORT` | Redis server port | 6379 | ❌ |
-| `REDIS_PASSWORD` | Redis password | - | ❌ |
-| `LOG_LEVEL` | Logging level | INFO | ❌ |
-| `DEBUG` | Debug mode | False | ❌ |
-
-### Supported Audio Formats
-
-- MP3 (`.mp3`)
-- WAV (`.wav`)
-- M4A (`.m4a`)
-- FLAC (`.flac`)
-- OGG (`.ogg`)
-- WebM (`.webm`)
-
-### Emotion Categories
-
-- `happy` - High pitch and energy
-- `sad` - Low pitch and energy
-- `angry` - High energy, elevated pitch
-- `neutral` - Balanced attributes
-- `surprised` - High pitch, high energy
-
-## 📊 Processing Pipeline
-
-```
-┌─────────────┐
-│ Audio Input │
-└──────┬──────┘
-       │
-       ├─────────────────────────┐
-       │                         │
-       ▼                         ▼
-┌──────────────┐         ┌──────────────┐
-│ Speech-to-   │         │   Emotion    │
-│ Text         │         │   Detection  │
-│ (Deepgram)   │         │ (OpenSmile)  │
-└──────┬───────┘         └──────┬───────┘
-       │                        │
-       ▼                        │
-┌──────────────┐                │
-│ Translation  │                │
-│  (DeepL)     │                │
-└──────┬───────┘                │
-       │                        │
-       └────────┬───────────────┘
-                │
-                ▼
-        ┌──────────────┐
-        │ Text-to-     │
-        │ Speech       │
-        │ (ElevenLabs) │
-        └──────┬───────┘
-               │
-               ▼
-        ┌──────────────┐
-        │ Audio Output │
-        └──────────────┘
-```
-
-## 🐛 Troubleshooting
-
-### Redis Connection Issues
-```bash
-# Check if Redis is running
-redis-cli ping
-# Should return: PONG
-
-# Test connection
-redis-cli -h localhost -p 6379
-```
-
-### OpenSmile Installation Issues
-```bash
-# If OpenSmile fails to install, the API will use mock emotion detection
-# For full functionality, ensure you have:
-pip install opensmile
-```
-
-### API Key Errors
-- Verify API keys are correctly set in `.env`
-- Check API quotas and limits
-- Ensure no extra spaces in environment variables
-
-## 📝 Development
-
-### Code Formatting
-```bash
-black app/
-```
-
-### Linting
-```bash
-flake8 app/
-```
-
-### Type Checking
-```bash
-mypy app/
-```
-
-## 🚀 Deployment
-
-### Docker Deployment
-
-```dockerfile
-# Example Dockerfile
-FROM python:3.10-slim
-
-WORKDIR /app
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY app/ ./app/
-COPY .env .
-
-EXPOSE 8000
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
-
-### Production Considerations
-
-- Use environment-specific `.env` files
-- Set `DEBUG=False` in production
-- Configure proper Redis persistence
-- Set up monitoring and logging
-- Use a process manager (e.g., supervisord, systemd)
-- Configure reverse proxy (nginx, traefik)
-- Enable HTTPS/TLS
-- Set up rate limiting
-- Configure file upload size limits
-
-## 📄 License
-
-MIT
-
-## 🤝 Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
-
-## 📚 API Service Documentation
-
-- [Deepgram API](https://developers.deepgram.com/)
-- [DeepL API](https://www.deepl.com/docs-api)
-- [ElevenLabs API](https://docs.elevenlabs.io/)
-- [OpenSmile Documentation](https://audeering.github.io/opensmile-python/)
-
----
-
-Built with ❤️ using FastAPI
+Access at: http://localhost:3000
